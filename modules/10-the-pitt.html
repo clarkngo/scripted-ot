@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 10 — The Pitt: Alarm Fatigue &amp; Life-Critical Facility Infrastructure | ScriptedOT</title>
+<meta name="description" content="The Pitt (2025) grounded in ECRI Institute and Joint Commission alarm-fatigue findings and a real medical gas cross-connection incident, mapped to NFPA 99/110.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 10 / Hospital Building Automation</span>
+      The Pitt (2025)
+    </h1>
+    <p class="subtitle">High-acuity alarm fatigue colliding with life-critical facility infrastructure during a mass-casualty surge.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Hospital Building Automation &amp; Medical Gas Systems</span>
+    <span class="tag focus">Focus: Alarm Fatigue &amp; Life-Critical Facility Infrastructure Failover</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: The Pitt (Max, 2025)</span>
+    <span>REAL-WORLD CASE: ECRI Institute Alarm Fatigue Hazard Reports; Joint Commission Sentinel Event Alert #50 (2013); Sheridan, WY medical gas cross-connection, 2022</span>
+    <span>RCA REF: ECRI Institute; The Joint Commission; NFPA 99 investigation findings</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "Which alarm is that? I can't tell anymore — they're all going off at once."
+      <span class="who">— paraphrased from a trauma bay crisis sequence</span>
+    </div>
+    <div class="note">
+      The scene: a medical trauma bay crisis during a high-patient-volume surge is compounded by facility power fluctuations, a chiller trip degrading HVAC pressure control, and medical gas manifold pressure alarms — all competing for the same limited staff attention alongside clinical patient alarms.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Dr. Robby (Attending Physician)</span><span class="arrow">→</span><span class="real">Lead Clinical Operator — analogous to a Control Room Shift Supervisor triaging competing alarms</span></li>
+      <li><span class="fict">Charge Nurse</span><span class="arrow">→</span><span class="real">SCADA/BAS Operator equivalent — monitoring facility and patient alarm streams simultaneously</span></li>
+      <li><span class="fict">Facilities/Engineering staff (background)</span><span class="arrow">→</span><span class="real">BAS Engineer responsible for HVAC, medical gas, and power systems</span></li>
+      <li><span class="fict">Hospital Administration</span><span class="arrow">→</span><span class="real">Site Operations Management balancing patient load against infrastructure constraints</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>During a mass-casualty surge, the trauma bay contends simultaneously with clinical alarm overload and facility-infrastructure strain — fluctuating power quality, a chiller trip degrading HVAC pressure control, and medical gas manifold pressure alarms — compounding clinical decision-making with unresolved facility alarms competing for the same limited staff attention.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Medical gas manifolds/cylinders, HVAC chillers and dampers, isolation-room pressure boundaries, backup generators, automatic transfer switches (ATS), patient bedside monitors.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      BAS controllers for HVAC/chiller sequencing and generator/ATS transfer logic; medical gas alarm panel logic per NFPA 99 — independent, hardwired circuits per gas type.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Two parallel Level 2 systems whose alarms both funnel toward overlapping staff attention: the central BAS supervisory HMI (facilities control room) and the clinical central monitoring station.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Hospital-wide facilities operations and emergency/incident command during a mass-casualty event.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <ul>
+      <li><strong>BACnet/MSTP or BACnet/IP:</strong> for HVAC and BAS integration.</li>
+      <li><strong>NFPA 99-mandated medical gas master alarm panels:</strong> typically hardwired, independent circuits per gas type.</li>
+      <li><strong>ATS transfer logic:</strong> operates on a defined power-loss-detection and transfer sequence, required to restore emergency power within 10 seconds per NFPA 110 for the applicable system type.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>Alarm fatigue is one of the most extensively documented patient-safety hazards in U.S. healthcare. The Joint Commission's 2013 Sentinel Event Alert #50 cited roughly 98 alarm-related patient deaths reported between 2005 and 2010, and ECRI Institute has named alarm hazards among its Top 10 Health Technology Hazards for many consecutive years. Separately, a 2022 medical gas cross-connection incident at a hospital in Sheridan, Wyoming — where a contractor cross-connected a nitrogen line into what should have been an oxygen supply during construction work — illustrates how a facility "failsafe" is only as reliable as its commissioning and source-verification procedure.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A compounding cascade — clinical surge plus simultaneous facility alarms — dramatized as a single-shift crisis.</td>
+          <td>Per ECRI Institute's annual hazard reports: alarm fatigue is a chronic, everyday condition rather than an episodic crisis — clinical staff are documented to be exposed to hundreds of alarms per patient per day, the vast majority clinically insignificant, independent of any single dramatic surge event.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Facility-alarm consequences (chiller trip, gas pressure drop) are compressed into the same tense real-time window as the clinical crisis.</td>
+          <td>Facility infrastructure failures are generally engineered with defined recovery windows (ATS within 10 seconds per NFPA 110) precisely so they don't compound acutely with a simultaneous clinical surge; per the Joint Commission, real alarm-fatigue harm is typically a single missed or desensitized alarm over a routine shift, not a dramatized multi-system cascade.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Staff are shown visibly overwhelmed by competing alarm streams.</td>
+          <td>Correctly reflects the documented phenomenon: the Joint Commission's alert specifically cites alarm-parameter settings not customized to individual patients, alarm signals not audible in all areas, and inconsistent staff response protocols as root visibility failures.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>Facility and clinical systems are implied to be manageable manually through the crisis by attentive staff.</td>
+          <td>The Sheridan, WY cross-connection shows a failsafe gap can be catastrophic and silent — a mislabeled/miswired gas source was not caught by any automatic verification system before patient harm occurred, showing that facility "failsafes" are only as good as commissioning procedures, not real-time monitoring alone.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Human Factors / HMI Alarm Fatigue + Process Design</span>
+    <p>Primary: Human Factors / Alarm Fatigue, per the Joint Commission and ECRI Institute. Compounded, in the medical-gas grounding case specifically, by a Process Design/Commissioning failure — no independent verification of gas line identity before connection to a patient supply, a violation of NFPA 99 source-verification requirements.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Alarm Threshold</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Medical gas manifold (oxygen)</td><td>~50–55 psig line pressure</td><td>Low-pressure alarm typically set ~20% below normal operating pressure, per NFPA 99</td></tr>
+        <tr><td>Isolation room pressure differential</td><td>±0.01 in. w.c. minimum relative to corridor (negative for infection isolation, positive for protective environments)</td><td>Alarm on loss of required differential</td></tr>
+        <tr><td>Automatic Transfer Switch (ATS)</td><td>Normal utility power</td><td>Required to complete transfer to emergency power within 10 seconds of loss, per NFPA 110 Type 10 classification</td></tr>
+        <tr><td>Bedside monitor alarm volume</td><td>N/A</td><td>ECRI/Joint Commission cite ICU bedside monitors alone generating on the order of hundreds of alarms per patient per day — well beyond what's clinically actionable by any single operator</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Alarm rationalization program (ISA-18.2 methodology):</strong> apply to both clinical monitors and BAS/facility alarm panels — eliminate default/non-customized alarm limits, classify and prioritize by clinical/operational significance.</li>
+      <li><strong>Independent annunciation paths for life-critical facility alarms:</strong> ensure medical gas and isolation-room pressure alarms cannot be masked by clinical alarm volume.</li>
+      <li><strong>Positive source verification for medical gas lines:</strong> gas-specific fittings and commissioning pressure/identity testing before any line is placed into service — directly addressing the cross-connection failure mode.</li>
+      <li><strong>Redundant, independently tested ATS/generator failover:</strong> verify the mandated sub-10-second transfer time on a routine test schedule, not only during real events.</li>
+      <li><strong>Defined escalation and manual-bypass procedures:</strong> allow facilities staff to silence/acknowledge nuisance BAS alarms without suppressing genuinely life-critical ones.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">ISA-18.2</span> — <span class="desc">Management of Alarm Systems methodology, applied here to healthcare facility and clinical alarm rationalization.</span></div>
+      <div class="std-ref"><span class="clause">NFPA 99</span> — <span class="desc">Health Care Facilities Code — medical gas and vacuum systems, source verification and alarm requirements.</span></div>
+      <div class="std-ref"><span class="clause">NFPA 110</span> — <span class="desc">Standard for Emergency and Standby Power Systems — ATS transfer time requirements.</span></div>
+      <div class="std-ref"><span class="clause">Joint Commission Sentinel Event Alert #50 (2013)</span> — <span class="desc">medical device alarm safety findings underpinning this module's RCA.</span></div>
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">BAS/BACnet network segmentation principles applicable to hospital facility systems.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

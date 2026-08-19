@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 03 — Jurassic Park: Insider Threat &amp; Cold-Start Failure | ScriptedOT</title>
+<meta name="description" content="Jurassic Park (1993) grounded in the Maroochy Shire SCADA sabotage, IEC 62443 zone/conduit segmentation, and fail-secure interlock design.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 03 / Building &amp; Perimeter Automation</span>
+      Jurassic Park (1993)
+    </h1>
+    <p class="subtitle">Insider threat, an undocumented automation job, and the hazard of a cold restart with no state verification.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Building &amp; Perimeter Automation</span>
+    <span class="tag focus">Focus: Insider Threat &amp; Air-Gap / Network Segmentation Failure</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Jurassic Park (Universal Pictures, 1993)</span>
+    <span>REAL-WORLD CASE: Maroochy Shire Sewage SCADA Sabotage, Queensland, AU, 2000-02 to 2000-04</span>
+    <span>RCA REF: Queensland Government / EPA incident findings; CISA/DHS ICS case studies</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "Ah, ah, ah — you didn't say the magic word."
+      <span class="who">— Dennis Nedry, moments before disabling park security systems</span>
+    </div>
+    <div class="note">
+      The scene: Chief Programmer Dennis Nedry, the park's sole systems administrator, runs a hidden automation job (referred to in the film as whte_rbt.obj) that disables security cameras, phone lines, and every perimeter fence — including the raptor and T-Rex paddocks — simultaneously, to cover a theft of embryos. Chief Engineer Ray Arnold later performs a hard system reboot, which fails to restore the fences to their prior energized state.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Dennis Nedry (Chief Programmer)</span><span class="arrow">→</span><span class="real">Privileged Systems Administrator / Insider Threat — sole author and gatekeeper of the park's control software</span></li>
+      <li><span class="fict">John Hammond (Park Owner)</span><span class="arrow">→</span><span class="real">Site Executive Sponsor — accountable for the overall system but not for its technical governance</span></li>
+      <li><span class="fict">Ray Arnold (Chief Engineer)</span><span class="arrow">→</span><span class="real">OT/Control Systems Engineer — attempts system recovery via a full reboot under time pressure</span></li>
+      <li><span class="fict">Robert Muldoon (Game Warden)</span><span class="arrow">→</span><span class="real">Physical Security / Safety Officer — responsible for containment once electronic controls fail</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A single insider with unilateral, unreviewed access to the park's control software embeds a hidden job that disables security, communications, and every perimeter safety interlock at once, to mask a data/asset exfiltration. The subsequent hard reboot — performed without any procedure for verifying and manually re-energizing safety-critical systems — restores general functionality but not the fences' prior secure state, and the outage window is enough for physical containment to fail.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Perimeter electric fence sections and energizers, gate/door lock actuators, security cameras, telephone exchange hardware.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Fence-zone controller logic, gate/lock actuator sequencing — all governed by the same central control software Nedry authored and administered alone.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      The park's central control room terminal (Nedry's own workstation), supervising security, guest services, and safety-interlock systems from a single console.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Integrated, unsegmented park control system combining guest services, telecommunications, and physical-safety interlocks on one network — no boundary between administrative/IT functions and safety-critical OT.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p>The film does not name a real protocol, but the architecture it depicts — one unified, flat control system with no boundary between guest-facing IT and safety-critical field control — is the exact condition ISA/IEC 62443's zone-and-conduit model exists to prevent.</p>
+    <ul>
+      <li><strong>Latching safety interlock:</strong> perimeter fences function as a continuously-energized safety barrier; the design lesson is that such interlocks must default to their last-known-safe (energized) state on any unexpected restart, not to "off."</li>
+      <li><strong>Single point of privileged control:</strong> one individual held unreviewed write access to safety-relevant logic — a direct violation of least-privilege and separation-of-duties principles for safety-critical systems.</li>
+      <li><strong>No command source authentication:</strong> nothing in the depicted system verifies that a given command (including the hidden job itself) originates from an authorized, reviewed source.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>The closest documented real-world analog is the Maroochy Shire sewage SCADA sabotage (Queensland, Australia, February–April 2000). Vitek Boden, a former contractor for the SCADA system's installer, used stolen radio equipment and control software — knowledge and access he retained from his prior role — to issue at least 46 unauthorized commands to sewage pumping stations over roughly two months, causing an estimated 800,000 liters of raw sewage to spill into local waterways and parks. It remains one of the most frequently cited real insider-enabled ICS attacks in CISA and DHS case studies precisely because it demonstrates unauthenticated remote command injection by someone with legitimate system knowledge.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A single hidden script execution disables every system at once — cameras, phones, and every fence — as one dramatic kill-switch event.</td>
+          <td>Maroochy: a campaign of at least 46 distinct unauthorized commands issued over roughly two months, not a single simultaneous shutdown.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Security failure and animal breach occur within minutes of the script running.</td>
+          <td>Each Maroochy command caused a localized pump station malfunction within minutes, but the full campaign went undetected for weeks before being traced to deliberate sabotage.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Arnold and Muldoon are unaware anything is wrong until camera feeds freeze and fences show no warning indication.</td>
+          <td>Maroochy operators initially attributed anomalies to equipment or communication faults, taking an extended period to recognize deliberate unauthorized access — the system had no way to distinguish an authorized command from Boden's.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>A cold reboot restores general system function but not the fences' prior secure, energized state — requiring manual re-energization under time pressure.</td>
+          <td>Maroochy's control system enforced no fail-secure default and no source authentication, meaning any correctly-formatted radio command — legitimate or not — was accepted and executed as if authorized.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Network/Cyber (Insider Threat) + Process Design</span>
+    <p>Primary root cause is a network/access-control failure: an unsegmented system with no command-source authentication, combined with a single individual holding unreviewed, unilateral write access to safety-critical logic. A contributing process-design factor is the absence of a fail-secure default — neither the fictional park nor the real Maroochy system was designed to default to a safe state when communication or control was disrupted.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Trip / Alarm Threshold</th><th>Condition at Failure</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Perimeter fence energization</td><td>Continuously energized, ~10,000V pulsed</td><td>Alarm on any de-energization event with position/status telemetry</td><td>De-energized for the duration of the hidden job's execution, with no logged alarm</td></tr>
+        <tr><td>Pump station status (Maroochy analog)</td><td>Continuous run/alarm status reporting to central SCADA</td><td>Alarm on unexpected pump stoppage or unauthorized setpoint change</td><td>Status suppressed or falsified intermittently across at least 46 separate events over ~2 months</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Network segmentation:</strong> isolate physical-security and safety-interlock systems from general site IT/guest networks per the IEC 62443 zone-and-conduit model.</li>
+      <li><strong>Privileged access control &amp; code review:</strong> require two-person review and change control for any script or logic change deployed to safety-critical systems — no single individual should hold unilateral write access.</li>
+      <li><strong>Fail-secure default state:</strong> design interlocks (fences, gates, locks) to default to their last-known-safe state on any unexpected restart or communication loss, never to "off" by default.</li>
+      <li><strong>Command source authentication:</strong> require authenticated, logged commands to remote field equipment — the specific fix mandated for SCADA radio links following Maroochy.</li>
+      <li><strong>Cold-start verification procedure:</strong> mandate manual verification of every safety-critical system's state before resuming normal operations after any reboot, rather than assuming restoration.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">IEC 62443-3-2 (Zone and Conduit Segmentation)</span> — <span class="desc">requires safety-critical systems to be logically and physically isolated from general-purpose IT and guest-facing networks.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-4-2 (Component Requirements)</span> — <span class="desc">mandates authentication for remote commands to field equipment, directly addressing the unauthenticated radio-command gap exploited at Maroochy Shire.</span></div>
+      <div class="std-ref"><span class="clause">ISA-84 / IEC 61511 (fail-safe state design)</span> — <span class="desc">safety-relevant interlocks must default to a defined safe state on loss of control or power, not an undefined or "off" state.</span></div>
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">insider threat and least-privilege access control guidance applicable to any single-administrator OT environment.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

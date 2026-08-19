@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 01 — Chernobyl: Positive Void Coefficient &amp; SIS Design Failure | ScriptedOT</title>
+<meta name="description" content="Chernobyl (2019) Episode 5 grounded in RBMK reactor design, INSAG-7, and IEC 61511 safety instrumented system principles.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 01 / Nuclear Power Generation</span>
+      Chernobyl (2019) — Episode 5, "Vichnaya Pamyat"
+    </h1>
+    <p class="subtitle">Positive void coefficient, SCRAM design flaws, and the hazard of testing outside the approved operating envelope.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Nuclear Power Generation</span>
+    <span class="tag focus">Focus: Safety Instrumented System (SIS) Override &amp; Interlock Failure</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Chernobyl (HBO/Sky, 2019)</span>
+    <span>REAL-WORLD CASE: RBMK-1000, Unit 4, Chernobyl NPP, 1986-04-26</span>
+    <span>RCA REF: INSAG-7 (IAEA, 1992)</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "You're stalling the test." "We are stabilizing the reactor."
+      <span class="who">— exchange between Dyatlov and the Unit 4 control room, paraphrased from the reactor-hall test sequence, Episode 5</span>
+    </div>
+    <div class="note">
+      Note: dialogue reproduced here is paraphrased rather than quoted verbatim, in line with copyright limits on reproducing scripted material. The scene: Deputy Chief Engineer Dyatlov presses Akimov and Toptunov to resume a delayed turbine-rundown test at deep low-power, dismissing their objections that the reactor is dangerously unstable.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Anatoly Dyatlov (Deputy Chief Engineer)</span><span class="arrow">→</span><span class="real">Test Director / Shift Operations Manager — authorized a procedural deviation under schedule pressure</span></li>
+      <li><span class="fict">Alexander Akimov (Unit 4 Shift Foreman)</span><span class="arrow">→</span><span class="real">Shift Supervisor — accountable for the control room, overruled by a superior officer on-shift</span></li>
+      <li><span class="fict">Leonid Toptunov (Senior Reactor Control Engineer)</span><span class="arrow">→</span><span class="real">Reactor Control (HMI/board) Operator — hands on the AZ-5 SCRAM pushbutton</span></li>
+      <li><span class="fict">Valery Legasov</span><span class="arrow">→</span><span class="real">Independent RCA Lead — analogous to a CSB investigator reconstructing the failure post-incident</span></li>
+      <li><span class="fict">Boris Shcherbina</span><span class="arrow">→</span><span class="real">Incident Commander — site emergency response authority, non-technical chain of command</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A turbine-rundown safety test is resumed after an unplanned delay, driving the reactor through a low-power operating region the RBMK was never validated for. Xenon-135 poisoning suppresses reactivity; operators withdraw control rods far beyond the permitted margin to compensate, masking the true state of the core. When the emergency SCRAM (AZ-5) is finally triggered, the control rods' graphite displacer tips push coolant out of the lower channels before the neutron-absorbing boron sections enter — inserting positive reactivity instead of shutting the reactor down. Power spikes to roughly 100× rated output in seconds; two explosions destroy the reactor core.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Control rods (200 manual + automatic regulator rods), graphite displacer tips, fuel channels, main circulating pumps (8 total, 8 running vs. recommended max), neutron flux ion chambers, pressure/steam-quality sensors in the separator drums.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control (PLC-equivalent)</span>
+      Local Automatic Regulator (LAR/AR) rod-position control loops; the AZ-5 emergency protection system — a hardwired, relay-logic latching trip that drives all control/emergency rods to full insertion. No microprocessor logic; this is electromechanical control predating digital fieldbus.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Unit 4 control room instrument panel: neutron flux recorders (unreliable at the low power the test was run at), reactivity margin indication (SKALA computer, advisory only — not interlocked to force a trip), steam/water parameters on analog gauges.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Plant-wide test scheduling and shift coordination between Unit 4 operations and the Kyiv grid dispatcher, who ordered the test delayed by ~9 hours — pushing it into a night shift with a less-experienced crew.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p>This is a pre-digital OT environment: no Modbus, DNP3, or OPC UA — control was hardwired analog/relay logic with electromechanical rod drive mechanisms. The relevant control concepts are:</p>
+    <ul>
+      <li><strong>PID-equivalent control:</strong> the Local Automatic Regulator held neutron flux at a setpoint via continuous rod position adjustment.</li>
+      <li><strong>Latching interlock (SIS-equivalent):</strong> AZ-5 was designed as the final independent protection layer — a one-way trip with no automatic reset, conceptually analogous to a modern IEC 61511 Safety Instrumented Function (SIF).</li>
+      <li><strong>Missing interlock:</strong> there was no automatic trip on low Operational Reactivity Margin (ORM). Operators could — and did — withdraw rods below the documented safe minimum with no independent system stopping them. In a modern SIS design this would be a mandatory, operator-independent Safety Integrity Level (SIL) rated trip.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>Chernobyl (2019) is a dramatization of an actual event, not a fictionalized analog — the Unit 4 accident of 26 April 1986. The authoritative technical reconstruction is the IAEA's <strong>INSAG-7</strong> (1992), which superseded the original 1986 INSAG-1 report after establishing that RBMK design flaws — not operator error alone — were a primary cause. Two design defects converge here: a <strong>positive void coefficient</strong> (as coolant boils to steam voids at low power, reactivity increases rather than decreases) and the <strong>positive scram effect</strong> of graphite-tipped control rods, which briefly increased reactivity on insertion instead of reducing it.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>Compressed into a single tense night: Dyatlov's pressure drives operators to override their own judgment.</td>
+          <td>INSAG-7: combination of RBMK design flaws (positive void coefficient, rod tip effect, no automatic ORM interlock) plus a test conducted with reactivity margin far below the documented safe minimum.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Show stretches the test prep across a dramatized, tension-building sequence before the explosion.</td>
+          <td>Test prep spanned over 24 hours (delayed by the grid dispatcher); from the AZ-5 button press to the first explosion was on the order of seconds.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Show depicts operators genuinely unable to see the reactor's true reactivity state — this is one of its more accurate beats.</td>
+          <td>Confirmed by INSAG-7: the SKALA computer's reactivity margin calculation took ~10–15 minutes to process and was advisory, not interlocked; flux instrumentation was unreliable at low power.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>AZ-5 is shown as the point of no return — the "safety" button that triggers the explosion.</td>
+          <td>Documented in INSAG-7: AZ-5 was the designed final protection layer, but the rod tip geometry meant its own actuation inserted positive reactivity before absorption began — a safety system that briefly became the initiating event.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Process/Reactor Design + Human Factors</span>
+    <p>Primary root cause is <strong>process design</strong>: an SIS component (the AZ-5 trip) capable of causing the very excursion it was meant to arrest, combined with the absence of an automatic, operator-independent interlock on reactivity margin. This combines with <strong>human factors</strong>: a test executed under schedule and authority pressure, in violation of the documented minimum operating reactivity margin, by a shift crew not fully briefed on the test program. This was not a network or cyber failure — there was no supervisory network to compromise — which is itself the lesson: rigorous interlock design matters independently of any cyber threat model.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Trip Threshold</th><th>Condition at Accident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Thermal power</td><td>3,200 MWt rated</td><td>Minimum safe test power: 700 MWt</td><td>~200 MWt — held for the test, below the documented safe floor</td></tr>
+        <tr><td>Operational Reactivity Margin (ORM)</td><td>≥ 30 equivalent control rods</td><td>Absolute minimum: 15 rods (no automatic trip existed)</td><td>Estimated 6–8 equivalent rods — no interlock stopped operation</td></tr>
+        <tr><td>Main circulating pumps</td><td>6 of 8 recommended in service</td><td>N/A (procedural limit, not interlocked)</td><td>8 of 8 running — reduced margin, increased flow-induced disturbance</td></tr>
+        <tr><td>Xenon-135 concentration</td><td>Stable at steady power</td><td>N/A — no automated compensation limit</td><td>Transient poisoning post-power-reduction, compensated manually by rod withdrawal</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Independent SIS trip on reactivity margin:</strong> implement an automatic, operator-independent reactor trip when ORM falls below the documented safe minimum — decoupled from the Basic Process Control System (BPCS) per IEC 61511 independence-of-layers principle.</li>
+      <li><strong>Eliminate positive-scram-effect geometry:</strong> redesign control rod/absorber assemblies so trip actuation cannot insert positive reactivity under any coolant condition.</li>
+      <li><strong>Xenon transient hold procedure:</strong> mandate a minimum stabilization period following any significant power reduction before resuming low-power testing.</li>
+      <li><strong>Management of Change (MOC) gate:</strong> require independent, documented authorization for any deviation from an approved test procedure — no single on-shift authority may waive a safety-margin requirement.</li>
+      <li><strong>Post-event fail-safe activation and cold shutdown:</strong> in the actual event, this step failed; the corrective program that followed added ORM interlocks and reduced rod insertion time to ~12 seconds fleet-wide.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">IEC 61511-1, Cl. 11 (SIS design)</span> — <span class="desc">requires the Safety Instrumented Function to be independent of the Basic Process Control System; the AZ-5/BPCS relationship at Unit 4 did not meet this separation in practice.</span></div>
+      <div class="std-ref"><span class="clause">IEC 61508 (Functional Safety of E/E/PE Systems)</span> — <span class="desc">the positive-scram-effect rod design is a textbook case of a safety function that fails to meet its own safety integrity requirement under specific process conditions.</span></div>
+      <div class="std-ref"><span class="clause">ISA-84 (MOC provisions)</span> — <span class="desc">management-of-change discipline for any test or procedure deviating from the approved safety case, with documented, independent sign-off.</span></div>
+      <div class="std-ref"><span class="clause">Scope note</span> — <span class="desc">this incident is a process-safety/SIS design failure, not a cyber incident. ISA/IEC 62443 (industrial cybersecurity) is not directly applicable; it is referenced elsewhere in ScriptedOT for network/cyber-vector modules.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

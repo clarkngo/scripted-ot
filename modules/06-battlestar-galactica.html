@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 06 — Battlestar Galactica: Air-Gap Bypass &amp; Supply-Chain Compromise | ScriptedOT</title>
+<meta name="description" content="Battlestar Galactica (2004) grounded in the 2017 NotPetya/Maersk attack, mapped to IEC 62443 segmentation and NIST SP 800-161 supply-chain risk management.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 06 / Maritime &amp; Defense Systems</span>
+      Battlestar Galactica (2004) — Miniseries / "33"
+    </h1>
+    <p class="subtitle">IT/OT convergence risk versus intentional air-gapping, and a backdoor delivered through a trusted software update.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Maritime / Defense &amp; Logistics Systems</span>
+    <span class="tag focus">Focus: Air-Gap Bypass &amp; IT/OT Supply-Chain Compromise</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Battlestar Galactica, Miniseries &amp; S1E1 "33" (Sci-Fi Channel, 2003–2004)</span>
+    <span>REAL-WORLD CASE: NotPetya / Maersk, 2017-06-27</span>
+    <span>RCA REF: Maersk public disclosures; Wired "The Untold Story of NotPetya" (2018)</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "Galactica's the only ship that never networked its systems. That's the only reason we're still flying."
+      <span class="who">— paraphrased from the miniseries' explanation of why Galactica survived the attack</span>
+    </div>
+    <div class="note">
+      The scene: a backdoor embedded in the fleet-wide Command Navigation Program (CNP), distributed as a trusted software update, is remotely triggered to disable nearly every modern, networked warship simultaneously. Only Galactica — an old vessel deliberately kept unnetworked per Admiral Adama's standing policy — remains combat-capable.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Admiral William Adama</span><span class="arrow">→</span><span class="real">Fleet Commander / CISO-equivalent — the standing advocate for keeping one system deliberately air-gapped</span></li>
+      <li><span class="fict">Dr. Gaius Baltar</span><span class="arrow">→</span><span class="real">Unwitting Insider — trusted access exploited to introduce the backdoor</span></li>
+      <li><span class="fict">Colonial Fleet CNP</span><span class="arrow">→</span><span class="real">Networked fleet-wide management platform — an OT/enterprise convergence layer</span></li>
+      <li><span class="fict">Galactica (legacy battlestar)</span><span class="arrow">→</span><span class="real">Isolated legacy asset — the real-world analog of an offline domain controller</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A backdoor distributed fleet-wide through a trusted software update channel is remotely activated, disabling almost every modern, networked ship's systems at once. The single asset spared is the one that was never connected to the network the update traveled through — an outcome the fleet did not plan for but that its air-gapped legacy vessel happened to satisfy.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Ship propulsion and weapons actuators, navigation sensors.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Shipboard fire-control and navigation controllers running the Command Navigation Program.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory</span>
+      Fleet-wide CNP coordination layer, receiving and applying software updates across every networked vessel.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3/4 — Site &amp; Enterprise</span>
+      Fleet command network distributing CNP updates — the boundary between enterprise software distribution and mission-critical ship control had effectively collapsed.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p>The show does not name a real protocol; the architecture it depicts — a single trusted update channel with write access into every ship's control system, and no code-signing or version isolation — maps directly onto any modern enterprise patch-management system with a path into operational technology. The core control-logic lesson is that <strong>trust in an update's origin is not the same as trust in its content</strong>, and that segmentation between distribution infrastructure and operational systems is what limits blast radius when that trust is misplaced.</p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>The <strong>NotPetya attack of June 27, 2017</strong> is an unusually close real-world match. Attackers compromised the auto-update mechanism of a widely used Ukrainian accounting package (M.E.Doc) and used it to distribute self-propagating malware that leveraged stolen credentials and NSA-derived exploits (EternalBlue/EternalRomance) to spread across networks with no further human action required. Global shipping company Maersk lost approximately 4,000 servers and 45,000 PCs across 130 countries within roughly seven minutes of the malware executing. Maersk's full recovery was made possible specifically because one domain controller, in a Ghana office, had been offline during a power outage at the exact moment of infection — preserving an uninfected copy of Active Directory. This is close to a literal real-world instance of "the unnetworked ship survives."</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A single, deliberately planted backdoor, introduced by a compromised insider and triggered on command.</td>
+          <td>NotPetya: a nation-state-attributed supply-chain compromise of a trusted accounting software's auto-update mechanism, self-propagating via stolen credentials and an NSA-derived exploit — no per-target human trigger needed.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Fleet-wide simultaneous disablement within the miniseries' opening timeframe — effectively immediate.</td>
+          <td>Maersk's global infrastructure was destroyed within approximately seven minutes of execution — an unusually close real-world match to the show's near-instant cascading failure.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Fleet crews have essentially no warning before their ships go dark.</td>
+          <td>Maersk IT staff observed screens going black simultaneously across offices worldwide with no time to intervene — a documented, striking real-world parallel.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>Only the intentionally air-gapped, non-networked Galactica survives combat-capable.</td>
+          <td>Maersk's recovery hinged entirely on one domain controller that happened to be offline at the moment of infection — a nearly literal analog to the show's central premise.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Network/Cyber (Supply-Chain Compromise)</span>
+    <p>Both cases are supply-chain/update-channel compromises combined with absent segmentation between the distribution channel and operational systems. In both fiction and reality, the deciding factor in survival was pre-existing, deliberate isolation of one asset — not a defense that was actively triggered during the event itself.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Condition at Incident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fleet combat-ready networked ships</td><td>~100% of networked fleet</td><td>Effectively 0% of networked ships combat-capable; 1 non-networked ship unaffected</td></tr>
+        <tr><td>Maersk domain infrastructure availability</td><td>Full IT availability</td><td>Full domain infrastructure loss within ~7 minutes across affected networks; recovery took roughly 10 days working around the clock from the single surviving domain controller</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Maintain a deliberately isolated recovery anchor:</strong> keep at least one air-gapped or logically isolated redundant asset independent of the primary networked fleet or enterprise — the core lesson in both the fictional and real case.</li>
+      <li><strong>Code-signing and independent verification:</strong> no software update is trusted into an operational/mission-critical system solely because it arrived via an internal distribution channel.</li>
+      <li><strong>Network segmentation:</strong> separate update/patch distribution infrastructure from operational control systems per the IEC 62443 zone/conduit model.</li>
+      <li><strong>Offline, tested backups of critical directory/configuration data:</strong> plan incident response around the assumption of total networked-infrastructure loss.</li>
+      <li><strong>Software supply-chain vetting:</strong> apply least-trust evaluation to any third-party or centrally-distributed control software before it reaches operational systems.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">NIST SP 800-161</span> — <span class="desc">cyber supply-chain risk management, directly applicable to the update-channel compromise vector at the center of both cases.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-2-1</span> — <span class="desc">security program requirements including patch management for industrial automation and control systems.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-3-2</span> — <span class="desc">zone and conduit segmentation between update distribution infrastructure and operational control systems.</span></div>
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">supply-chain risk management guidance for ICS environments.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>
