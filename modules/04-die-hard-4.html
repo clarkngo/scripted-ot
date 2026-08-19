@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 04 — Live Free or Die Hard: Grid &amp; Pipeline Command Injection | ScriptedOT</title>
+<meta name="description" content="Live Free or Die Hard (2007) grounded in the 2015 Ukraine grid attack and the Bellingham/Olympic Pipeline rupture, mapped to NERC CIP and HIPPS design.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 04 / Smart Grid &amp; Pipeline</span>
+      Live Free or Die Hard (2007)
+    </h1>
+    <p class="subtitle">Remote supervisory command injection, spoofed pressure telemetry, and cascading infrastructure interdependence.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Smart Grid &amp; Oil/Gas Pipeline</span>
+    <span class="tag focus">Focus: Remote Command Injection &amp; Cascading Infrastructure Failure</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Live Free or Die Hard (20th Century Fox, 2007)</span>
+    <span>REAL-WORLD CASE: 2015 Ukraine Power Grid Attack (BlackEnergy); 1999 Bellingham/Olympic Pipeline Rupture</span>
+    <span>RCA REF: E-ISAC/SANS 2016 Ukraine report; NTSB/CSB Bellingham findings</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "This is a fire sale. Three steps... everything connected to the system goes down."
+      <span class="who">— paraphrased from Thomas Gabriel's description of the attack plan</span>
+    </div>
+    <div class="note">
+      The scene: a coordinated cyberattack sequentially targets transportation, financial systems, and then critical infrastructure — remotely opening power grid substation breakers to cause cascading blackouts and injecting false telemetry into natural gas pipeline SCADA to force valve mismanagement and explosions.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Thomas Gabriel (former DoD cyber advisor)</span><span class="arrow">→</span><span class="real">Advanced Persistent Threat actor with privileged former-access knowledge of the target systems</span></li>
+      <li><span class="fict">John McClane</span><span class="arrow">→</span><span class="real">Physical Incident Responder — restores control through on-site, manual intervention</span></li>
+      <li><span class="fict">Matt Farrell</span><span class="arrow">→</span><span class="real">OT/IT Forensic Analyst assisting real-time response and system analysis</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A single actor achieves near-instantaneous remote control of grid substations and pipeline SCADA, opening breakers to cascade a regional blackout and spoofing pressure telemetry to trigger a gas pipeline explosion — both depicted as immediate, centrally-orchestrated events with no meaningful resistance from the underlying control systems.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Substation circuit breakers/switchgear, pipeline valves and compressor stations, pressure transmitters, current transformers.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Substation protective relays and RTUs, pipeline RTU/PLC logic governing valve position and compressor sequencing.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Utility SCADA/Energy Management System (EMS) HMI; pipeline SCADA control center HMI — both the point at which the attacker's remote commands were rendered as if legitimate.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Regional grid operations center and pipeline dispatch center, both linked to enterprise IT without adequate segmentation, allowing externally-originated compromise to reach Level 2 supervisory control.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <ul>
+      <li><strong>DNP3 / IEC 61850 / IEC 60870-5-104:</strong> substation communication and breaker control protocols, historically deployed with little to no command authentication.</li>
+      <li><strong>Modbus / DNP3:</strong> pipeline RTU polling and remote valve/compressor command traffic.</li>
+      <li><strong>ESD (Emergency Shutdown) valves and HIPPS:</strong> the final independent protection layer intended to prevent over-pressurization regardless of what the primary SCADA path reports.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>Two distinct real incidents ground this module. The <strong>2015 Ukraine power grid attack</strong> (BlackEnergy/KillDisk, later followed by the 2016 Industroyer/CRASHOVERRIDE malware) saw attackers spend months gaining access via spear-phishing and stolen VPN credentials before remotely opening breakers at three regional utilities, cutting power to roughly 230,000 customers. The <strong>1999 Bellingham, Washington Olympic Pipeline rupture</strong> occurred when the SCADA system became unresponsive during concurrent database development work; operators lost timely visibility into rising line pressure, a downstream valve was left in an unfavorable configuration, and the pipeline ruptured and ignited, killing three people — investigated by the NTSB and referenced extensively in CSB process-safety literature.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>One hacker achieves instantaneous, unified remote control of an entire regional grid and pipeline network via a single orchestrated "fire sale."</td>
+          <td>Ukraine 2015 required months of reconnaissance, spear-phishing, and credential theft across three separate utility companies before coordinated breaker operations; Bellingham stemmed from a SCADA performance/overload issue during routine maintenance work, not an attack.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Grid cascades and gas explosions occur within minutes of keystrokes.</td>
+          <td>Ukraine's actual breaker-opening operation took under 30 minutes at each utility after a 6–9 month intrusion lifecycle; Bellingham's rupture-to-ignition took roughly 1 hour 15 minutes after pressure began rising undetected.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Operators are shown as instantly and totally blind to the intrusion.</td>
+          <td>Ukraine operators watched their own mouse cursors move and breakers open in real time — control was visibly wrested from them, not silently; Bellingham operators had a frozen, delayed SCADA display and did not realize commands weren't taking effect.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>No meaningful automatic protection intervenes; systems are fully subverted by the attacker.</td>
+          <td>Ukraine utilities recovered largely by manually driving to substations and closing breakers by hand, since remote control itself had been compromised; Bellingham had no automatic high-pressure shutdown independent of the failed SCADA path — a documented finding that drove later HIPPS requirements.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Network/Cyber (Ukraine) + Process Design &amp; Human Factors (Bellingham)</span>
+    <p>Ukraine 2015: credential theft and inadequate segmentation between corporate IT and SCADA/EMS. Bellingham 1999: a SCADA system overloaded by concurrent, unrelated development work, with no independent high-pressure protection layer and delayed operator recognition of the anomaly.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Trip Threshold</th><th>Condition at Incident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Substation breaker status</td><td>Per feeder configuration, protection relay-supervised</td><td>Automatic trip on abnormal frequency/current</td><td>~30 substations manually opened by attacker command, ~230,000 customers without power for 1–6 hours (Ukraine 2015)</td></tr>
+        <tr><td>Pipeline segment pressure</td><td>~370–400 psi in the affected segment</td><td>Maximum Allowable Operating Pressure (MAOP)</td><td>Pressure spiked while SCADA was unresponsive and a downstream valve was left closed, exceeding the pipe's degraded failure threshold (Bellingham 1999)</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Network segmentation &amp; MFA-controlled remote access:</strong> isolate corporate IT from SCADA/EMS with jump hosts and multi-factor authentication — directly addresses the credential-theft pathway exploited in Ukraine.</li>
+      <li><strong>Independent manual/black-start breaker capability:</strong> ensure every substation can be operated locally without dependence on remote SCADA control.</li>
+      <li><strong>High-Integrity Pressure Protection System (HIPPS):</strong> deploy an SIS-based emergency shutdown independent of the primary SCADA/telemetry path for pipeline over-pressure protection — the direct post-Bellingham corrective measure.</li>
+      <li><strong>SCADA performance monitoring:</strong> automatically alert operators when polling latency or display refresh exceeds a defined threshold, addressing the "frozen display" root cause at Bellingham.</li>
+      <li><strong>Multi-site incident response runbook:</strong> pre-stage manual override procedures at each site rather than relying solely on centralized response.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">NERC CIP-005 / CIP-007</span> — <span class="desc">electronic security perimeter and system security management requirements for bulk electric system assets, directly applicable to the grid thread.</span></div>
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">network segmentation guidance for electric and oil/gas OT environments.</span></div>
+      <div class="std-ref"><span class="clause">IEC 61511 / ISA-84</span> — <span class="desc">HIPPS/SIS independence requirements for pipeline over-pressure protection.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-3-3, SR 1.x</span> — <span class="desc">access control requirements addressing the remote-access compromise pattern seen in the Ukraine attack.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 08 — Apollo 13: Black-Start Power Sequencing | ScriptedOT</title>
+<meta name="description" content="Apollo 13 (1995) grounded in the actual 1970 mission and the Cortright Report, mapped to black-start restoration procedures and component-rating verification.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 08 / Aerospace &amp; Microgrid Power</span>
+      Apollo 13 (1995)
+    </h1>
+    <p class="subtitle">Subsystem dependency, constrained power budgets, and manual sequencing under failure conditions.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Aerospace / Spacecraft Power &amp; Life Support</span>
+    <span class="tag focus">Focus: Black-Start Power Sequencing &amp; Constrained-Resource Operations</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Apollo 13 (Universal Pictures, 1995)</span>
+    <span>REAL-WORLD CASE: Apollo 13 mission, 1970-04-13</span>
+    <span>RCA REF: Apollo 13 Review Board / Cortright Report (NASA, 1970)</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "Houston, we have a problem."
+      <span class="who">— Jim Lovell, moments after the oxygen tank rupture</span>
+    </div>
+    <div class="note">
+      The scene: a routine cryogenic oxygen tank "stir" ignites damaged wiring insulation, rupturing the tank and disabling the Service Module's primary power, oxygen, and water systems. The crew must power down nearly the entire spacecraft to conserve the Lunar Module's limited battery reserves, then execute an unrehearsed manual power-up sequence within strict amperage limits before reentry.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Jim Lovell (Commander)</span><span class="arrow">→</span><span class="real">Site Incident Commander — on-scene authority making real-time operational tradeoffs</span></li>
+      <li><span class="fict">Gene Kranz (Flight Director)</span><span class="arrow">→</span><span class="real">Control Room Operations Manager — the System Operations Center equivalent</span></li>
+      <li><span class="fict">John Aaron / EECOM</span><span class="arrow">→</span><span class="real">Power Systems Engineer devising the manual load-shedding and black-start sequence</span></li>
+      <li><span class="fict">Ken Mattingly (simulator support)</span><span class="arrow">→</span><span class="real">Engineering Verification Lead validating the power-up procedure before uplink</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A latent hardware defect, triggered by a routine operation, cascades into a total loss of primary power, oxygen, and water generation. Recovery depends entirely on manual, procedure-driven load-shedding and a never-before-attempted power restoration sequence, developed and verified against a hard amperage constraint with no margin for error.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Fuel cells, oxygen tanks/heaters/fans (the stir mechanism), batteries, thrusters, CO2 scrubbers.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Command Module / Lunar Module power distribution and sequencing — largely manual/procedural, hardwired switch panels rather than software-driven logic.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Spacecraft instrument panel and caution-and-warning system — the "Master Alarm" annunciator.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Mission Control (Houston) — real-time telemetry monitoring and procedure authorization, a remote Level 3/4 site-operations center directing a Level 0–2 asset it cannot physically touch.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p>Pre-digital hardwired analog telemetry, transmitted via S-band downlink to Mission Control. The core control mechanism is manual sequencing under a hard power budget — directly analogous to a modern <strong>black-start</strong> procedure for restoring a de-energized power grid segment in a defined, amperage-constrained order to avoid inrush-current trips on re-energization.</p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>Apollo 13 (1995) dramatizes an actual event — the April 1970 mission. The authoritative technical account is NASA's Apollo 13 Review Board report (the Cortright Report). Its finding: damaged Teflon insulation on wiring inside Oxygen Tank 2 — caused by a pre-launch ground test conducted at a voltage (65V DC) beyond the tank's thermostatic switch rating (28V DC), welding the switch contacts shut undetected — was ignited by a routine in-flight cryogenic stir, rupturing the tank and damaging adjacent Service Module systems.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>Film compresses the technical explanation into a dramatic bang and immediate crisis recognition.</td>
+          <td>Per the Cortright Report: a latent defect from an out-of-spec ground test months earlier went undetected through pre-flight checks, then was activated by a routine in-flight procedure — a classic latent-defect-plus-normal-operation failure pattern.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>The explosion-to-crisis-recognition beat is shown as immediate.</td>
+          <td>Matches reality: the anomaly was recognized within seconds via telemetry and crew report. The improvised power-up sequence, however, took ground teams roughly three days of continuous simulator work to develop — compressed in the film into a shorter dramatized sequence.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Mission Control is shown with clear, accurate telemetry throughout — no blind spots.</td>
+          <td>This is one of the more accurate beats: telemetry clearly showed falling oxygen pressure and dropping power, giving Mission Control genuine (if alarming) visibility, unlike the blind-telemetry pattern in cases such as Chernobyl or Deepwater Horizon.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>The Lunar Module is depicted as an improvised "lifeboat" power source under a strict budget.</td>
+          <td>Accurate: the LM was never designed to power the combined stack, and the ad hoc power budget — developed by John Aaron and the EECOM team — had to keep total current draw under a strict limit to avoid tripping the LM's own breakers during the reentry power-up.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Mechanical / Process Design</span>
+    <p>A latent wiring defect from an out-of-spec ground test, undetected by pre-flight verification procedures — not a control-system or cyber failure, but a case study in emergency manual sequencing after a Level 0 mechanical failure cascades into total primary-power loss.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Trip / Design Threshold</th><th>Condition at Incident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Cryogenic O2 tank pressure</td><td>~865–935 psia</td><td>Thermostat switches rated for 28V DC</td><td>Ground-test exposure to 65V DC welded switch contacts shut, undetected before flight</td></tr>
+        <tr><td>Tank pressure post-rupture</td><td>N/A</td><td>N/A</td><td>Fell to 0 within roughly 3 minutes of the stir; Tank 1 and fuel cell output subsequently degraded, forcing total Command Module power-down</td></tr>
+        <tr><td>LM entry battery budget</td><td>Standard non-emergency entry checklist power draw</td><td>Hard ceiling to avoid breaker trip</td><td>Constrained to approximately 20 amps average draw for the improvised powered-up return sequence</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Manual load-shedding to a minimum-power configuration:</strong> immediately upon loss of primary power generation, prioritize life-support systems over all non-essential loads.</li>
+      <li><strong>Ground-simulator validation before uplink:</strong> verify any never-before-used power-up sequence in simulation before committing it to the crew, given no onboard capacity for safe trial-and-error under a hard amperage constraint.</li>
+      <li><strong>Strict, procedure-driven power-up sequencing:</strong> follow a specific switch order to avoid inrush current tripping downstream breakers — the direct analog to a modern black-start restoration procedure.</li>
+      <li><strong>Independent verification of ground-test parameters:</strong> confirm test voltage/thermal exposure against component ratings before flight qualification, addressing the latent-defect root cause directly.</li>
+      <li><strong>Post-incident design change:</strong> NASA redesigned the oxygen tank heater/thermostat system and added a third oxygen tank with additional isolation valves for subsequent missions.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">Apollo 13 Review Board (Cortright Report, 1970)</span> — <span class="desc">the authoritative RCA for this incident.</span></div>
+      <div class="std-ref"><span class="clause">NERC EOP-005</span> — <span class="desc">system restoration and black-start planning, conceptually mapped to the manual power-sequencing lesson.</span></div>
+      <div class="std-ref"><span class="clause">IEC 61508</span> — <span class="desc">component ratings must bound all credible test and operating conditions, not only nominal ones — the direct lesson from the out-of-spec ground-test exposure.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

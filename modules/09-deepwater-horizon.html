@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 09 — Deepwater Horizon: SIS/ESD Failure &amp; Alarm Normalization | ScriptedOT</title>
+<meta name="description" content="Deepwater Horizon (2016) grounded in the CSB and National Commission reports on the 2010 Macondo well blowout, mapped to IEC 61511 and ISA-18.2.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 09 / Oil &amp; Gas — Offshore Drilling</span>
+      Deepwater Horizon (2016)
+    </h1>
+    <p class="subtitle">A disregarded pressure test, alarm normalization, and the final protection layer that didn't seal the well.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Oil &amp; Gas / Offshore Drilling</span>
+    <span class="tag focus">Focus: SIS/ESD Failure &amp; Alarm Normalization</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Deepwater Horizon (Summit Entertainment, 2016)</span>
+    <span>REAL-WORLD CASE: Macondo Well Blowout, Gulf of Mexico, 2010-04-20</span>
+    <span>RCA REF: U.S. Chemical Safety Board (2016); National Commission on the BP Deepwater Horizon Spill (2011)</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "That's not a bladder effect. That's a well control problem."
+      <span class="who">— paraphrased from the negative-pressure test dispute scene</span>
+    </div>
+    <div class="note">
+      The scene: a negative-pressure test intended to confirm well integrity produces an ambiguous result that is disregarded; hydrocarbons unexpectedly flow up the wellbore undetected for critical minutes, reach the rig, and ignite. The subsea Blowout Preventer's automatic and manual emergency systems fail to seal the well.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Mike Williams (Chief Electronics Technician)</span><span class="arrow">→</span><span class="real">Instrumentation &amp; Controls / SIS Engineer</span></li>
+      <li><span class="fict">Jimmy Harrell (Offshore Installation Manager)</span><span class="arrow">→</span><span class="real">Site Operations Manager</span></li>
+      <li><span class="fict">BP well site leaders</span><span class="arrow">→</span><span class="real">Client Representative / Operations Authority under schedule pressure</span></li>
+      <li><span class="fict">Andrea Fleytas</span><span class="arrow">→</span><span class="real">Control Room Operator — initiated the general alarm</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>An anomalous negative-pressure test result is explained away rather than escalated as a well-control warning sign. Mud-pit monitoring is not actively watched during a concurrent, unrelated operation, delaying kick recognition. When the blowout begins, the subsea Blowout Preventer's shear-ram and deadman/autoshear systems — the final independent protection layer — fail to seal the well.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Wellbore, drill pipe, Blowout Preventer (BOP) rams/shear, mud pits and pumps, gas detectors.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control (SIS)</span>
+      BOP control pods (subsea electronic modules, SEM) running acoustic/deadman/autoshear logic — the Safety Instrumented System layer intended to act independent of the main control system.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Driller's cabin HMI/mud-logging displays, rig-wide alarm and gas-detection system.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Rig operations and well-site leadership overseeing test interpretation and go/no-go decisions.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p>The BOP's deadman and autoshear functions are SIS-equivalent latching safety functions, designed to activate independent of communication, hydraulic, or power loss from the surface. The relevant modern framing is a <strong>High-Integrity Pressure Protection System (HIPPS)</strong>-class final layer of protection — its availability depends entirely on standby power and proof-testing discipline, not just on the logic being correct.</p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>Deepwater Horizon (2016) dramatizes the actual Macondo well blowout of April 20, 2010. The authoritative technical accounts are the U.S. Chemical Safety Board's 2016 report and the National Commission on the BP Deepwater Horizon Spill (2011). Both found that an anomalous negative-pressure test reading — roughly 1,400 psi on the drill pipe against 0 psi on the kill line — was explained away using an inapplicable "bladder effect" theory rather than treated as a well-control warning sign.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A dramatized dispute between BP representatives and rig crew over interpreting the negative-pressure test.</td>
+          <td>Per CSB/National Commission: the anomalous test reading was explained away with an unverified "bladder effect" theory rather than escalated — a documented instance of confirmation bias in test interpretation.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Kick-to-explosion is shown as a fast, escalating sequence over the film's final act.</td>
+          <td>Hydrocarbon flow began undetected approximately 40–50 minutes before the first explosion, with multiple missed indicators (mud returns, pit volume increases) during that window.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Crew notice physical signs (mud spraying) essentially at the last moment.</td>
+          <td>Matches reality closely: mud-pit level monitoring was not being actively watched during a concurrent, unrelated displacement operation — a documented alarm-management and workload gap, compounded by rig alarms reportedly inhibited to avoid nuisance night-time alerts.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>The BOP fails to seal the well despite manual and automatic activation attempts.</td>
+          <td>CSB found the blind shear ram failed to fully seal the wellbore, partly because the drill pipe had buckled off-center under well-flow forces before shear activation — outside the BOP's tested design envelope — and the deadman/autoshear system did not activate as intended due to a low-voltage/dead-battery condition in one control pod.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Human Factors / Alarm Management + Process Design</span>
+    <p>Test misinterpretation and inhibited alarms (Human Factors) combined with a BOP shear-ram design envelope that did not account for off-center pipe buckling under dynamic well-flow loading (Process Design) — a compound failure at the final SIS/ESD protection layer, following upstream misjudgment of a key well-integrity test.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Anomaly Threshold</th><th>Condition at Incident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Negative-pressure test — drill pipe</td><td>Bleeds to and holds at 0 psi</td><td>Any non-zero sustained reading is a well-control indicator</td><td>~1,400 psi observed, incorrectly attributed to a "bladder effect"</td></tr>
+        <tr><td>Mud pit volume</td><td>Stable during a static well condition</td><td>Any unexplained rise flags a possible kick</td><td>Increased by several barrels over the ~40-minute pre-explosion window, unrecognized</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Standardized negative-pressure test acceptance criteria:</strong> treat any anomalous reading as a well-control indicator requiring the test to be repeated or escalated, never explained away by an unverified alternative theory.</li>
+      <li><strong>Continuous, dedicated mud-pit/return-flow monitoring:</strong> maintain independent of concurrent unrelated rig activities to avoid the attention-allocation gap documented at Macondo.</li>
+      <li><strong>BOP design verification against off-center pipe loading:</strong> ensure shear rams can seal under realistic dynamic well-flow conditions, not only idealized centered-pipe conditions.</li>
+      <li><strong>Independent power/battery verification for SIS control pods:</strong> confirm deadman/autoshear standby power integrity on a defined maintenance interval, since SIS availability depends on it.</li>
+      <li><strong>Alarm management review:</strong> eliminate any practice of inhibiting safety-relevant alarms for operational convenience.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">IEC 61511</span> — <span class="desc">SIS design and proof-testing requirements, specifically SIS availability/proof-test interval requirements applicable to the deadman/autoshear battery failure.</span></div>
+      <div class="std-ref"><span class="clause">ISA-18.2</span> — <span class="desc">alarm management — inhibited/suppressed alarms are a direct violation of alarm rationalization principles.</span></div>
+      <div class="std-ref"><span class="clause">API RP 53 / API RP 96</span> — <span class="desc">industry-specific well-control and BOP practices, cited alongside the CSB's 2016 recommendations.</span></div>
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">general OT reliability and SIS/ESD independence concepts, though this is fundamentally a process-safety rather than cyber case.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

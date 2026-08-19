@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 07 — The Italian Job: Traffic Master-Station Compromise | ScriptedOT</title>
+<meta name="description" content="The Italian Job (2003) grounded in the 2006 Los Angeles traffic signal sabotage, mapped to NTCIP, access-revocation controls, and NIST SP 800-82.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 07 / Traffic Management</span>
+      The Italian Job (2003)
+    </h1>
+    <p class="subtitle">Master-station compromise, spoofed detector feeds, and overridden signal-timing plans.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Traffic Management / Municipal ITS</span>
+    <span class="tag focus">Focus: Master-Station Compromise &amp; Field-Controller Command Spoofing</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: The Italian Job (Paramount Pictures, 2003)</span>
+    <span>REAL-WORLD CASE: Los Angeles Traffic Signal Sabotage, 2006-08</span>
+    <span>RCA REF: LA City Attorney prosecution records; press coverage of People v. Patel/Murillo</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "I'm in. Every light on our route just went green — everyone else's just went red."
+      <span class="who">— paraphrased from Lyle's manipulation of the traffic control center</span>
+    </div>
+    <div class="note">
+      The scene: Lyle penetrates the Los Angeles Automated Traffic Surveillance and Control (ATSAC) center and manipulates real-time signal timing to create a green-wave escape corridor for the heist crew while gridlocking pursuing vehicles — overriding the city's standard phase-timing plans.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Lyle (hacker)</span><span class="arrow">→</span><span class="real">Insider-Enabled Threat Actor — technically capable, exploiting access rather than a pure network penetration</span></li>
+      <li><span class="fict">Charlie Croker (crew leader)</span><span class="arrow">→</span><span class="real">Operation Lead directing the exploit's objective</span></li>
+      <li><span class="fict">ATSAC control center staff (background)</span><span class="arrow">→</span><span class="real">Traffic Management Center (TMC) Operators</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A single actor gains access to the city's master traffic-signal system and manipulates phase timing across many intersections simultaneously and in real time, for a use entirely outside its intended operational purpose — with no meaningful barrier between planning-level system access and live field-controller command authority.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Traffic signal heads, inductive loop vehicle detectors, controller cabinets at each intersection.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Local intersection traffic controllers (NEMA/actuated controllers) running phase-timing logic.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory</span>
+      ATSAC master computer / Traffic Management Center — the SCADA-equivalent supervisory system coordinating signal timing city-wide.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      City transportation department operations, setting and approving signal-timing plans.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p><strong>NTCIP</strong> (National Transportation Communications for ITS Protocol) governs communication between a TMC and field controllers over serial or IP links. Legacy municipal traffic systems have historically used unauthenticated command sets with no cryptographic signing between the TMC and field cabinets — meaning any party with system access, authorized or not, can issue commands the field controller will execute without question.</p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>In August 2006, two Los Angeles city traffic engineers, Kartik Patel and Gabriel Murillo, used their legitimate system access — before it was revoked, exploiting a delay in the termination process during a labor dispute — to reprogram signal controllers at four major intersections, locking specific approaches on maximum red-light delay. The resulting gridlock persisted for four days before the sabotage was traced and corrected, and both engineers were later prosecuted.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A remote hacker with no privileged insider status penetrates ATSAC's live system in real time to manipulate signals citywide.</td>
+          <td>LA 2006: two city traffic engineers used their own legitimate, not-yet-revoked system access to directly reprogram specific intersection controllers.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Traffic pattern changes appear instantaneously and precisely choreographed across many intersections during a live chase.</td>
+          <td>The LA sabotage caused persistent red-light delays lasting four days before detection and correction — a static configuration change, not a real-time dynamic manipulation.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>TMC staff are shown as generally unaware their system is being externally puppeted.</td>
+          <td>LA operators noticed unusual congestion complaints from the public but took time to trace it to deliberate reprogramming, since the changes were made through what looked like legitimate configuration access.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>No meaningful protective response is depicted; the system does exactly what the hacker commands.</td>
+          <td>Once identified, the city restored standard timing plans from a backed-up configuration baseline relatively quickly — illustrating the value of configuration versioning and rollback capability.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Network/Cyber (Insider Access Control Failure)</span>
+    <p>Both cases fundamentally rely on privileged access rather than a pure network-based command injection. The specific gap was inadequate access-revocation timing and no authorization boundary separating planning-level access from live field-controller write access.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Anomaly Threshold</th><th>Condition at Incident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Signal cycle length</td><td>60–120 seconds per intersection, per timing plan</td><td>N/A — no automatic anomaly detection existed</td><td>Specific approaches locked to maximum red-hold indefinitely, producing sustained gridlock</td></tr>
+        <tr><td>All-red hold duration</td><td>A few seconds, for safety clearance only</td><td>Any sustained hold far beyond the timing plan's design should be flagged</td><td>Held far outside any legitimate timing plan for four days, undetected by the system itself</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Immediate access revocation tied to HR events:</strong> no lag between a termination or role-change action and system access removal — the specific documented gap in the 2006 case.</li>
+      <li><strong>Role-based access control:</strong> separate "view/monitor" privileges from "write timing plan" privileges, with all field-controller configuration changes logged and attributed.</li>
+      <li><strong>Configuration baseline versioning and automatic rollback:</strong> enable rapid restoration of signal timing plans once tampering is detected.</li>
+      <li><strong>Anomaly detection on sustained non-standard signal states:</strong> flag any approach held at maximum red far longer than any legitimate timing plan permits.</li>
+      <li><strong>Authenticate and sign NTCIP command traffic:</strong> cryptographically sign communications between the TMC and field cabinets where legacy hardware allows.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">access control guidance for ICS/ITS environments, applicable to the insider access-revocation gap.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-3-3, SR 2.1</span> — <span class="desc">use control and account management requirements.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-2-1</span> — <span class="desc">personnel security and access-revocation procedures.</span></div>
+      <div class="std-ref"><span class="clause">NTCIP 9001</span> — <span class="desc">interoperability guide, referenced for context on legacy authentication gaps in municipal traffic systems.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

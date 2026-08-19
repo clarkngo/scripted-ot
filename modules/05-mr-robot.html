@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 05 — Mr. Robot: BAS Exploitation &amp; Physical Process Damage | ScriptedOT</title>
+<meta name="description" content="Mr. Robot S3E5/E6 grounded in Stuxnet and a real 2013 BACnet building-automation exploit, mapped to IEC 62443 component authentication requirements.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 05 / Data Center &amp; Critical Power</span>
+      Mr. Robot (2017) — S3E5/E6
+    </h1>
+    <p class="subtitle">Cyber-to-physical destruction via battery management overcharging, HVAC tampering, and building-protocol exploitation.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Data Center / Critical Power Infrastructure</span>
+    <span class="tag focus">Focus: BAS Exploitation &amp; Physical Process Damage via Logic Manipulation</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: Mr. Robot, "eps3.4_runtime-error.r00" &amp; "eps3.5_kill-pr0cess.inc" (USA Network, 2017)</span>
+    <span>REAL-WORLD CASE: Stuxnet (2010); BACnet HVAC exploit, Google Sydney office, 2013</span>
+    <span>RCA REF: Symantec Stuxnet Dossier; Billy Rios BACnet disclosure (2013)</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "We're not just deleting the backups. We're going to make sure they can never be recovered."
+      <span class="who">— paraphrased from the fsociety team's plan to destroy E Corp's backup facility</span>
+    </div>
+    <div class="note">
+      The scene: fsociety combines a physical breach of a backup data facility with cyber manipulation of the UPS battery management system to force overcharging, while tampering with HVAC and fire-suppression building automation, aiming to destroy backup tape archives and cripple the target's financial resiliency.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Elliot Alderson / fsociety</span><span class="arrow">→</span><span class="real">Red Team / Advanced Persistent Threat conducting a blended physical-and-cyber operation</span></li>
+      <li><span class="fict">Dominique DiPierro (FBI)</span><span class="arrow">→</span><span class="real">Incident Response / Law Enforcement Liaison investigating the attack after the fact</span></li>
+      <li><span class="fict">Facility engineers (background)</span><span class="arrow">→</span><span class="real">Facility / BAS Operations staff responsible for power and environmental systems</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>An operation blends a physical intrusion (installing rogue devices) with a cyber override of the UPS charge controller to force battery overcharging — a thermal runaway risk — while separately manipulating HVAC and fire-suppression building automation, all aimed at physically destroying backup infrastructure that the target's business continuity depends on.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      UPS battery strings and charging circuits, HVAC dampers and CRAC units, fire-suppression discharge valves, temperature/humidity sensors.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Battery/UPS charge-controller logic, HVAC PLC logic, fire panel logic — each capable, if reprogrammed, of driving physical conditions outside safe limits.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Building Management System (BMS/BAS) supervisory workstation — the console an attacker would need to reach to issue the overcharge and HVAC commands.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Facility operations linked to corporate IT — the convergence point exploited to reach BAS/UPS control from a network foothold.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <ul>
+      <li><strong>BACnet/IP and BACnet MS/TP:</strong> the dominant building-automation protocol family for HVAC and fire-panel integration, historically deployed with little to no authentication.</li>
+      <li><strong>Modbus TCP:</strong> common in UPS/battery-management monitoring integration with BAS.</li>
+      <li><strong>Telemetry spoofing to the HMI:</strong> the defining control-logic concept here — feeding an operator console falsified "normal" readings while the physical process runs outside safe parameters, the same technique documented in Stuxnet.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>Two real cases ground this module. <strong>Stuxnet (discovered 2010)</strong> is the definitive case of PLC logic manipulation causing physical damage: malware reprogrammed Siemens S7-300 controllers to intermittently over-speed uranium enrichment centrifuges while feeding pre-recorded "normal" telemetry back to the operator HMI, so the physical sabotage remained invisible to plant staff for an extended period. Separately, security researcher <strong>Billy Rios's 2013 disclosure</strong> demonstrated that a Google office building in Sydney, Australia had its HVAC building-automation system exposed to the internet via an unauthenticated BACnet/IP gateway, allowing direct external access to building controls with no login required.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A single blended operation executes both the charge-controller override and HVAC/fire tampering within one coordinated event.</td>
+          <td>Stuxnet required a multi-stage supply-chain intrusion (USB-borne, then network propagation) reprogramming PLC logic over months; the 2013 BACnet case required only an unauthenticated internet-exposed gateway with no privileged access needed at all.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>A dramatic, near-immediate thermal event within the episode's timeframe.</td>
+          <td>Stuxnet's centrifuge damage accrued gradually over months, specifically engineered to avoid detection — the opposite of a fast, dramatic strike.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Facility engineers are largely unaware of the intrusion until physical alarms trigger.</td>
+          <td>This is Stuxnet's defining real-world lesson: the malware fed pre-recorded "normal" process data to the Siemens WinCC HMI while the physical process ran outside safe parameters, so operators saw nothing wrong on screen.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>Fire suppression and HVAC safety systems are themselves shown failing under direct attack.</td>
+          <td>Stuxnet specifically manipulated centrifuge speed within a range that avoided triggering the existing over-speed protection trip — exploiting the gap between "normal" and "trip" telemetry rather than defeating the safety system outright.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Network/Cyber</span>
+    <p>Both grounding cases are Network/Cyber failures: Stuxnet via air-gap bypass and telemetry spoofing to the HMI; the BACnet case via an unauthenticated, internet-exposed building-protocol gateway — a design and configuration gap corresponding to a failure of IEC 62443 SR 1.1/1.2 access control requirements.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Trip Threshold</th><th>Condition at Incident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>UPS battery cell voltage (VRLA float)</td><td>~2.27 V/cell</td><td>Thermal runaway risk above ~50–60°C cell temperature without charge-current cutback</td><td>Depicted overcharge scenario removes the automatic cutback, driving temperature past safe limits</td></tr>
+        <tr><td>Data hall temperature</td><td>18–27°C (ASHRAE recommended band)</td><td>Alarm above ~30°C</td><td>HVAC tampering depicted as disabling normal thermal control</td></tr>
+        <tr><td>Centrifuge rotor speed (Stuxnet analog)</td><td>~1,064 Hz nominal</td><td>Over-speed protection trip at a defined upper limit</td><td>Briefly driven to ~1,410 Hz and cycled down to ~2 Hz, per the Symantec dossier — outside safe mechanical limits but within the range that avoided triggering the trip</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Authenticate and segment BAS gateways:</strong> no internet-facing BACnet/Modbus building controller without VPN and multi-factor authentication, segmented from general IT — directly addresses the 2013 BACnet gateway exposure pattern.</li>
+      <li><strong>Independent hardwired protection:</strong> thermal/overcurrent protection on battery strings that cannot be overridden by a network-issued setpoint change.</li>
+      <li><strong>HMI/telemetry integrity validation:</strong> cross-check reported process values against an independent, out-of-band sensor path to catch spoofed "normal" readings — the specific gap Stuxnet exploited.</li>
+      <li><strong>Physical access control &amp; device inventory:</strong> maintain asset inventory and port security at backup/DR facilities to close the physical-installation pathway the operation depended on.</li>
+      <li><strong>Change management / code-signing for PLC logic uploads:</strong> verify any control logic change offline against a known-good baseline before deployment.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">IEC 62443-4-2</span> — <span class="desc">component-level authentication requirements for controllers and gateways, directly applicable to the exposed BACnet gateway case.</span></div>
+      <div class="std-ref"><span class="clause">IEC 62443-3-3, SR 1.1–1.2</span> — <span class="desc">access control requirements for supervisory and field-device communication.</span></div>
+      <div class="std-ref"><span class="clause">NIST SP 800-82 Rev. 3</span> — <span class="desc">building automation system security guidance.</span></div>
+      <div class="std-ref"><span class="clause">NFPA 76</span> — <span class="desc">fire protection standard for telecommunications/data facilities, referenced as a facility-specific complement to the cyber controls above.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>

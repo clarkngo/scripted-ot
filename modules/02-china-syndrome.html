@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 02 — The China Syndrome: Telemetry Divergence &amp; the Stuck PORV | ScriptedOT</title>
+<meta name="description" content="The China Syndrome (1979) grounded in the Three Mile Island accident, NRC/Kemeny Commission findings, and ISA-18.2 alarm management.">
+<script>(function(){try{var t=localStorage.getItem('scriptedot-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">ScriptedOT <span>// cyber-physical training modules</span></div>
+    <nav class="site-nav">
+      <a href="../index.html">Index</a>
+      <button id="theme-toggle" type="button">🌙 Dark</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1>
+      <span class="module-num">Module 02 / Nuclear Power Generation</span>
+      The China Syndrome (1979)
+    </h1>
+    <p class="subtitle">Sensor feedback vs. actual physical state, and the confirmation bias that follows a false-good reading.</p>
+  </div>
+
+  <div class="meta-tags">
+    <span class="tag domain">Domain: Nuclear Power Generation</span>
+    <span class="tag focus">Focus: Telemetry Divergence &amp; Alarm Interpretation</span>
+  </div>
+
+  <div class="status-strip">
+    <span><span class="dot">●</span> SOURCE: The China Syndrome (Columbia Pictures, 1979)</span>
+    <span>REAL-WORLD CASE: Three Mile Island Unit 2, 1979-03-28</span>
+    <span>RCA REF: Kemeny Commission Report (1979); NRC NUREG-0600</span>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section class="block">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">The Script — Cinematic Anchor</h2>
+
+    <h3 class="sub">Dialogue Extract</h3>
+    <div class="quote-block">
+      "The gauge says the core is covered." "Then why does everything in this room say we're losing it?"
+      <span class="who">— paraphrased exchange from the control-room emergency sequence</span>
+    </div>
+    <div class="note">
+      Note: dialogue is paraphrased rather than quoted verbatim, in line with copyright limits on reproducing scripted material. The scene: a shift supervisor and control room crew watch a level indicator suggest the reactor core is adequately covered with coolant, while other instruments and a physical vibration in the plant suggest the opposite.
+    </div>
+
+    <h3 class="sub">Dramatis Personae → OT Mapping</h3>
+    <ul class="mapping-list">
+      <li><span class="fict">Jack Godell (Shift Supervisor)</span><span class="arrow">→</span><span class="real">Lead Control Room Engineer — the operator who trusts instrumentation until physical evidence forces him to question it</span></li>
+      <li><span class="fict">Ted Spindler (Control Room Operator)</span><span class="arrow">→</span><span class="real">Reactor Operator / Board Operator — hands-on the control desk during the transient</span></li>
+      <li><span class="fict">Kimberly Wells (TV Reporter)</span><span class="arrow">→</span><span class="real">External Observer / Public Communications — analogous to the NRC and press interface during a real event</span></li>
+      <li><span class="fict">Plant Management</span><span class="arrow">→</span><span class="real">Site Operations Management — balancing production continuity against an ambiguous safety indication</span></li>
+    </ul>
+
+    <h3 class="sub">Diegetic Failure Mode</h3>
+    <p>A turbine trip cascades into a cooling-water transient. A relief valve sticks open, draining reactor coolant, but the control room's indicator shows the valve as closed because it reads the solenoid <em>command</em> signal rather than the valve's actual physical position. Operators, trusting a level gauge that is itself misleading under the developing conditions, believe the core is adequately covered. A vibration felt through the plant structure — physical evidence outside the instrumentation chain — is what ultimately forces the crew to question the indicated state.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="block">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Theoretical ICS Architecture</h2>
+
+    <h3 class="sub">Purdue Model Impact</h3>
+
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 0 — Field Devices</span>
+      Pilot-Operated Relief Valve (PORV) on the pressurizer, reactor coolant pumps, steam generators, pressurizer level and pressure transmitters, PORV solenoid actuator.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 1 — Basic Control</span>
+      Pressurizer pressure/level control loop (automatic PORV open/close command on high-pressure setpoint), Engineered Safety Features Actuation System (ESFAS) — hardwired trip and Emergency Core Cooling System (ECCS) initiation logic.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 2 — Supervisory / HMI</span>
+      Control room annunciator panel and analog indicator lights — critically, the PORV "open/closed" indicator light reflects the command sent to the solenoid, not an independent position sensor on the valve itself.
+    </div>
+    <div class="purdue-level">
+      <span class="lvl-tag">Level 3 — Site Operations</span>
+      Plant shift scheduling and operations management; post-event, utility and NRC coordination on emergency classification and public notification.
+    </div>
+
+    <h3 class="sub">Protocols &amp; Control Logic</h3>
+    <p>Pre-digital analog/hardwired control, predating fieldbus and networked SCADA. The control concepts that matter here transfer directly to modern OT:</p>
+    <ul>
+      <li><strong>Command-state vs. true-state feedback:</strong> the PORV indicator reflected an actuation command, not a verified physical position — the same class of gap that appears in modern Modbus/DNP3 systems when a coil's read-back register mirrors the last write rather than an independent limit-switch or position sensor.</li>
+      <li><strong>ECCS/High-Pressure Injection as a SIS-equivalent function:</strong> automatically initiated on low pressure, later manually throttled back by operators who misread rising pressurizer level (actually caused by steam voiding, not excess coolant) as an overfill risk.</li>
+      <li><strong>Missing independent instrumentation:</strong> no direct core-cooling margin indication existed; operators had to infer core state from pressure and level readings that were themselves ambiguous during the transient.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="block">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Real-World Incident Precedent</h3>
+    <p>The China Syndrome was released 12 days before the Three Mile Island Unit 2 (TMI-2) accident of March 28, 1979 — a coincidence widely noted at the time for its near-exact structural match. At TMI-2, a PORV on the pressurizer stuck open following a turbine trip; the control room indicator showed the valve closed because it displayed the solenoid command state, not actual valve position. Operators, observing a rising (not falling) pressurizer level — caused by coolant flashing to steam as inventory was lost — throttled back High Pressure Injection, worsening the loss of coolant. The result was a partial core meltdown, documented in the Kemeny Commission Report and NRC's NUREG-0600.</p>
+
+    <h3 class="sub">Cinematic vs. Reality Matrix</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Media Depiction (The Script)</th><th>Industrial Reality (The Plant)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Failure Vector</td>
+          <td>A stuck relief valve and a falsely reassuring gauge combine to nearly cause a meltdown, averted by a vigilant supervisor.</td>
+          <td>Near-identical mechanism at TMI-2: a stuck-open PORV with a command-state (not position) indicator, compounded by operators throttling ECCS based on a misread pressurizer level.</td>
+        </tr>
+        <tr>
+          <td>Time to Impact</td>
+          <td>Film compresses the crisis into a tight, real-time thriller sequence of roughly an hour or two.</td>
+          <td>TMI-2 unfolded over approximately 16 hours from initial trip to core-damage stabilization; operators took about 2 hours 20 minutes to recognize the loss-of-coolant condition.</td>
+        </tr>
+        <tr>
+          <td>Operator Visibility</td>
+          <td>Operators trust the gauge until a physical cue (vibration) contradicts it.</td>
+          <td>Matches reality closely: no direct PORV position sensor existed, and pressurizer level readings were actively misleading — a documented instrumentation design gap, not an operator competency failure.</td>
+        </tr>
+        <tr>
+          <td>Failsafe Behavior</td>
+          <td>Automatic safety systems are shown responding, but operator disbelief in the readings delays proper action.</td>
+          <td>ECCS/High Pressure Injection did auto-initiate on low pressure as designed, but was manually throttled by operators trusting the (deceptive) pressurizer level indication over the core-cooling reality.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Root-Cause Analysis (RCA)</h3>
+    <span class="rca-tag">Classification: Human Factors / HMI Alarm Interpretation + Process Design</span>
+    <p>The Kemeny Commission identified the root cause as primarily human factors compounded by instrumentation design: operators had no direct means to verify PORV position or true core-cooling margin, and were confronted with over 100 simultaneous alarms in the opening minutes — an alarm flood that obscured rather than clarified the plant's true state. This is a foundational case in the history of alarm management standards: the absence of alarm prioritization directly contributed to a slow, confused diagnosis.</p>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="block">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Engineering Runbook &amp; Countermeasures</h2>
+
+    <h3 class="sub">Telemetry Envelope</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Normal / Baseline</th><th>Trip Threshold</th><th>Condition at Accident</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Reactor Coolant System pressure</td><td>~2,155 psig</td><td>PORV lift setpoint ~2,255 psig, reseat ~2,205 psig</td><td>Fell abnormally after PORV stuck open post-lift, while indicator showed closed</td></tr>
+        <tr><td>Pressurizer level</td><td>Normal band ~220–360 inches</td><td>High-level alarm near top of band</td><td>Rose deceptively due to steam voiding, read by operators as "going solid," prompting HPI throttle-back</td></tr>
+        <tr><td>Core subcooling margin</td><td>&gt;20°F (no direct instrument existed pre-TMI)</td><td>N/A — added post-accident as Subcooling Margin Monitor</td><td>Unmonitored directly; inferred incorrectly from pressure/level alone</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="sub">Mitigation / Recovery Protocol</h3>
+    <ol class="runbook">
+      <li><strong>Independent valve position telemetry:</strong> install direct limit-switch or position-sensor feedback on all safety-relevant valves, reporting actual state independent of the command/solenoid signal.</li>
+      <li><strong>Direct core-cooling margin instrumentation:</strong> provide operators a computed subcooling margin (the post-TMI Subcooling Margin Monitor) rather than requiring inference from pressure and level alone.</li>
+      <li><strong>Alarm rationalization:</strong> prioritize and suppress redundant/consequential alarms during a transient so the first-out and safety-critical alarms remain visible, rather than presenting a flood of over 100 simultaneous indications.</li>
+      <li><strong>Procedure change — never throttle ECCS/HPI on level alone:</strong> during a suspected loss-of-coolant event, safety injection is not reduced based on pressurizer level without independent confirmation of core-cooling adequacy.</li>
+      <li><strong>Simulator training for multiple-failure, ambiguous-instrumentation scenarios:</strong> post-TMI, NRC-mandated simulator retraining specifically targeted small-break LOCA scenarios combined with misleading indications.</li>
+    </ol>
+
+    <h3 class="sub">Standards Reference</h3>
+    <div class="std-refs">
+      <div class="std-ref"><span class="clause">ISA-18.2 (Management of Alarm Systems)</span> — <span class="desc">TMI-2's alarm flood is a foundational case cited in the development of modern alarm rationalization and prioritization practice.</span></div>
+      <div class="std-ref"><span class="clause">NRC Regulatory Guide 1.97</span> — <span class="desc">post-TMI instrumentation requirements mandating direct, unambiguous indication of plant safety status, including valve position and core-cooling margin.</span></div>
+      <div class="std-ref"><span class="clause">IEC 61511, Cl. 11.5 (sensor/final element independence)</span> — <span class="desc">requires safety-relevant position feedback to be independent of the command signal that drives the actuator — the specific gap exposed at TMI-2.</span></div>
+      <div class="std-ref"><span class="clause">Scope note</span> — <span class="desc">this is a process-safety/instrumentation design case, not a cyber incident; grounding is drawn from the Kemeny Commission Report and NRC NUREG-0600 rather than any cybersecurity standard.</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  ScriptedOT — cinematic anchors for rigorous OT/ICS engineering education.
+</footer>
+
+<script src="../assets/theme.js" defer></script>
+</body>
+</html>
