@@ -52,7 +52,15 @@
       <span class="who">— paraphrased from the fsociety team's plan to destroy E Corp's backup facility</span>
     </div>
     <div class="note">
-      The scene: fsociety combines a physical breach of a backup data facility with cyber manipulation of the UPS battery management system to force overcharging, while tampering with HVAC and fire-suppression building automation, aiming to destroy backup tape archives and cripple the target's financial resiliency.
+      The scene: fsociety combines a physical breach of a backup data facility with cyber manipulation of the UPS battery management system to force overcharging, while tampering with HVAC and fire-suppression building automation, aiming to destroy backup tape archives and cripple the target's financial resiliency. Comic strip below is an original educational parody of the scene beats — not frames from the series.
+    </div>
+
+    <h3 class="sub">Scene Visual — Comic Strip</h3>
+    <div class="scene-visual">
+      <figure class="comic-figure">
+        <img class="comic-img" src="../assets/comics/05-mr-robot.png" alt="Four-panel comic of UPS thermal runaway and BAS tampering" width="1600" height="900" loading="lazy">
+        <figcaption class="visual-caption">COMIC · UPS / BAS attack (original educational strip)</figcaption>
+      </figure>
     </div>
 
     <h3 class="sub">Dramatis Personae → OT Mapping</h3>
@@ -102,6 +110,15 @@
   <section class="block">
     <div class="section-label">Section 03</div>
     <h2 class="section-title">The Plant — Empirical Grounding</h2>
+
+    <h3 class="sub">Plant Visual — Comic Strip</h3>
+    <div class="scene-visual">
+      <figure class="comic-figure">
+        <img class="comic-img" src="../assets/comics/s3-05-mr-robot.png" alt="Four-panel comic of Stuxnet PLC deception and BACnet exposure" width="1600" height="900" loading="lazy">
+        <figcaption class="visual-caption">COMIC · The Plant — Stuxnet + exposed BACnet (original educational strip)</figcaption>
+      </figure>
+    </div>
+
 
     <h3 class="sub">Real-World Incident Precedent</h3>
     <p>Two real cases ground this module. <strong>Stuxnet (discovered 2010)</strong> is the definitive case of PLC logic manipulation causing physical damage: malware reprogrammed Siemens S7-300 controllers to intermittently over-speed uranium enrichment centrifuges while feeding pre-recorded "normal" telemetry back to the operator HMI, so the physical sabotage remained invisible to plant staff for an extended period. Separately, security researcher <strong>Billy Rios's 2013 disclosure</strong> demonstrated that a Google office building in Sydney, Australia had its HVAC building-automation system exposed to the internet via an unauthenticated BACnet/IP gateway, allowing direct external access to building controls with no login required.</p>
