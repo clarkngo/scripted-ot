@@ -2,7 +2,7 @@
 
 A static site of ten short training modules that each open with a recognizable film or TV scene, then ground it in a real, documented industrial control system (ICS/OT) incident — Purdue Model breakdown, cinematic-vs-reality matrix, root-cause classification, and an engineering runbook citing ISA/IEC 62443, NIST SP 800-82, ISA-18.2, and related standards.
 
-Live at: **https://github.com/clarkngo/scripted-ot**
+Live at: **https://clarkngo.github.io/scripted-ot/**
 
 ## What's in it
 
