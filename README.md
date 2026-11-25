@@ -4,6 +4,8 @@ A static site of ten short training modules that each open with a recognizable f
 
 Live at: **https://clarkngo.github.io/scripted-ot/**
 
+**Teaching with it:** see the [Instructor Guide](INSTRUCTOR_GUIDE.md) for a module map, a 50-minute lesson plan, discussion questions, and a starter rubric.
+
 ## What's in it
 
 - [`index.html`](index.html) — homepage: explains the four-part module structure and links all ten modules.
